@@ -5,4 +5,4 @@ dist
 .env
 temp
 
-node_module
+node_modules
