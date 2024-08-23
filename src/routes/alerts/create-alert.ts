@@ -4,6 +4,7 @@ import { z } from "zod";
 import { AlertType } from "../../utils/alert-type.ts";
 import { supabase } from "../../lib/supabase.ts";
 import { checksUserGuard } from "../auth/auth-guard.ts";
+import { getUserTrialQuotesHelper } from "../helpers/get-user-trial-quotes.ts";
 
 export async function createAlert(app: FastifyInstance) {
   app
@@ -22,6 +23,16 @@ export async function createAlert(app: FastifyInstance) {
       },
       async ({ user, body }, reply) => {
         const { title, type, description } = body;
+
+        const userCanCreateAlert = await getUserTrialQuotesHelper(user.id);
+
+        if (!userCanCreateAlert) {
+          return reply
+            .code(400)
+            .send({
+              message: "You have reached the limit of alerts you can create",
+            });
+        }
 
         const { error: databaseError } = await supabase.from("alert").insert({
           title,
