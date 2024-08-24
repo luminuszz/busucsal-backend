@@ -6,6 +6,12 @@ import { supabase } from "../../lib/supabase.ts";
 import { checksUserGuard } from "../auth/auth-guard.ts";
 import { getUserTrialQuotesHelper } from "../helpers/get-user-trial-quotes.ts";
 
+const createAlertSchema = z.object({
+  title: z.string(),
+  description: z.string(),
+  type: z.nativeEnum(AlertType),
+});
+
 export async function createAlert(app: FastifyInstance) {
   app
     .addHook("preHandler", checksUserGuard)
@@ -14,24 +20,23 @@ export async function createAlert(app: FastifyInstance) {
       "/alerts",
       {
         schema: {
-          body: z.object({
-            title: z.string(),
-            description: z.string(),
-            type: z.nativeEnum(AlertType),
-          }),
+          body: createAlertSchema,
         },
       },
       async ({ user, body }, reply) => {
         const { title, type, description } = body;
 
-        const userCanCreateAlert = await getUserTrialQuotesHelper(user.id);
+        const { error, result: userCanCreateAlert } =
+          await getUserTrialQuotesHelper(user.id);
+
+        if (error) {
+          return reply.code(500).send({ message: error.message });
+        }
 
         if (!userCanCreateAlert) {
-          return reply
-            .code(400)
-            .send({
-              message: "You have reached the limit of alerts you can create",
-            });
+          return reply.code(400).send({
+            message: "You have reached the limit of alerts you can create",
+          });
         }
 
         const { error: databaseError } = await supabase.from("alert").insert({

@@ -1,9 +1,12 @@
 import { supabase } from "../../lib/supabase.ts";
 import { addDays } from "date-fns";
+import type { ResponseType } from "../../utils/constants.ts";
+
+type GetUserTrialQuotesResponse = ResponseType<Error, boolean>;
 
 export async function getUserTrialQuotesHelper(
   userId: string,
-): Promise<boolean> {
+): Promise<GetUserTrialQuotesResponse> {
   const startDate = new Date();
   const endDate = addDays(startDate, 1);
 
@@ -15,8 +18,11 @@ export async function getUserTrialQuotesHelper(
     .lte("created_at", endDate.toISOString());
 
   if (error) {
-    throw new Error("Error getting user trial quotes");
+    return { error: new Error(error.message), result: null };
   }
 
-  return count ? count < 4 : true;
+  return {
+    result: count ? count < 4 : true,
+    error: null,
+  };
 }
