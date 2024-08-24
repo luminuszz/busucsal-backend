@@ -1,8 +1,8 @@
 import { supabase } from "../../lib/supabase.ts";
 import { addDays } from "date-fns";
-import type { ResponseType } from "../../utils/constants.ts";
+import type { EitherResponse } from "../../utils/constants.ts";
 
-type GetUserTrialQuotesResponse = ResponseType<Error, boolean>;
+type GetUserTrialQuotesResponse = EitherResponse<Error, boolean>;
 
 export async function getUserTrialQuotesHelper(
   userId: string,

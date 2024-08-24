@@ -15,6 +15,7 @@ const app = fastify({ logger: true }).withTypeProvider<ZodTypeProvider>();
 
 app.setSerializerCompiler(serializerCompiler);
 app.setValidatorCompiler(validatorCompiler);
+
 app.register(fastifyCors, { origin: ["http://localhost:3000"] });
 app.decorateRequest("user", null);
 

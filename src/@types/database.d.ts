@@ -1,3 +1,5 @@
+import type { AlertType } from "../utils/constants.ts";
+
 export type Json =
   | string
   | number
@@ -11,28 +13,28 @@ export type Database = {
     Tables: {
       alert: {
         Row: {
-          author_id: string | null;
+          author_id: string;
           created_at: string;
-          description: string | null;
+          description: string;
           id: string;
-          title: string | null;
-          type: string | null;
+          title: string;
+          type: AlertType;
         };
         Insert: {
-          author_id?: string | null;
+          author_id?: string;
           created_at?: string;
-          description?: string | null;
+          description?: string;
           id?: string;
-          title?: string | null;
-          type?: string | null;
+          title?: string;
+          type?: string;
         };
         Update: {
-          author_id?: string | null;
+          author_id?: string;
           created_at?: string;
-          description?: string | null;
+          description?: string;
           id?: string;
-          title?: string | null;
-          type?: string | null;
+          title?: string;
+          type?: string;
         };
         Relationships: [];
       };

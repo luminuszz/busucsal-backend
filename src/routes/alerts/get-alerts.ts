@@ -3,14 +3,16 @@ import type { FastifyInstance } from "fastify";
 import { z } from "zod";
 import type { ZodTypeProvider } from "fastify-type-provider-zod";
 
+export const getAlertsSchemaParamsSchema = z.object({
+  page: z.number().int().positive().default(1),
+});
+
 export async function getAlertsRoute(app: FastifyInstance) {
   app.withTypeProvider<ZodTypeProvider>().get(
     "/alerts",
     {
       schema: {
-        params: z.object({
-          page: z.number().int().positive().default(1),
-        }),
+        params: getAlertsSchemaParamsSchema,
       },
     },
 

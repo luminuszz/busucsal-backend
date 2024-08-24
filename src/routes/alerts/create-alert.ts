@@ -1,12 +1,12 @@
 import type { FastifyInstance } from "fastify";
 import type { ZodTypeProvider } from "fastify-type-provider-zod";
 import { z } from "zod";
-import { AlertType } from "../../utils/alert-type.ts";
 import { supabase } from "../../lib/supabase.ts";
 import { checksUserGuard } from "../auth/auth-guard.ts";
 import { getUserTrialQuotesHelper } from "../helpers/get-user-trial-quotes.ts";
+import { AlertType } from "../../utils/constants.ts";
 
-const createAlertSchema = z.object({
+export const createAlertSchema = z.object({
   title: z.string(),
   description: z.string(),
   type: z.nativeEnum(AlertType),
