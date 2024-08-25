@@ -11,7 +11,7 @@ const signupSchema = z.object({
 
 export async function signupRoute(app: FastifyInstance) {
   app.withTypeProvider<ZodTypeProvider>().post(
-    "signup",
+    "/signup",
     {
       schema: {
         body: signupSchema,
